@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import BottomNav from '../components/BottomNav'
+import API_BASE_URL from '../config/api.js'
 
 const UserProfile = () => {
   const navigate = useNavigate()
@@ -13,7 +14,7 @@ const UserProfile = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/auth/me', { withCredentials: true })
+        const res = await axios.get(`${API_BASE_URL}/api/auth/me`, { withCredentials: true })
         const me = res.data?.user
         const r = res.data?.role
         setUser(me)
@@ -24,7 +25,7 @@ const UserProfile = () => {
         }
         // Fetch saved count for simple activity summary
         try {
-          const savedRes = await axios.get('http://localhost:3000/api/food/saved', { withCredentials: true })
+          const savedRes = await axios.get(`${API_BASE_URL}/api/food/saved`, { withCredentials: true })
           setSavedCount((savedRes.data?.data || []).length)
         } catch (e) {
           setSavedCount(0)
@@ -40,7 +41,7 @@ const UserProfile = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.get('http://localhost:3000/api/auth/user/logout', { withCredentials: true })
+      await axios.get(`${API_BASE_URL}/api/auth/user/logout`, { withCredentials: true })
       navigate('/')
     } catch (e) {
       navigate('/')

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import BottomNav from '../src/components/BottomNav'
+import API_BASE_URL from '../src/config/api.js'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -18,7 +19,7 @@ const Home = () => {
   const handleLogout = async () => {
     try {
       const logoutEndpoint = role === 'food_partner' ? '/api/auth/foodpartner/logout' : '/api/auth/user/logout'
-      await axios.get(`http://localhost:3000${logoutEndpoint}`, { withCredentials: true })
+      await axios.get(`${API_BASE_URL}${logoutEndpoint}`, { withCredentials: true })
       setRole(null)
       setCurrentUser(null)
       setVideos([])
@@ -36,7 +37,7 @@ const Home = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/auth/me', { withCredentials: true })
+        const res = await axios.get(`${API_BASE_URL}/api/auth/me`, { withCredentials: true })
         setRole(res.data.role)
         setCurrentUser(res.data.user)
       } catch (e) {
@@ -55,7 +56,7 @@ const Home = () => {
       if (!role) return
       setLoadingFeed(true)
       try {
-        const response = await axios.get('http://localhost:3000/api/food', { withCredentials: true })
+        const response = await axios.get(`${API_BASE_URL}/api/food`, { withCredentials: true })
         const transformed = (response.data?.data || []).map((foodItem) => ({
           id: foodItem._id,
           videoUrl: foodItem.video,
@@ -71,14 +72,14 @@ const Home = () => {
           const ids = transformed.map(v => v.id)
           // Like status
           const likeRes = await axios.post(
-            'http://localhost:3000/api/food/like-status',
+            `${API_BASE_URL}/api/food/like-status`,
             { foodIds: ids },
             { withCredentials: true }
           )
           setLikeStatus(likeRes.data.status || {})
           // Save status
           const saveRes = await axios.post(
-            'http://localhost:3000/api/food/save-status',
+            `${API_BASE_URL}/api/food/save-status`,
             { foodIds: ids },
             { withCredentials: true }
           )
@@ -98,7 +99,7 @@ const Home = () => {
     setLikeAnimating((prev) => ({ ...prev, [videoId]: true }))
     try {
       const res = await axios.post(
-        'http://localhost:3000/api/food/like',
+        `${API_BASE_URL}/api/food/like`,
         { foodId: videoId },
         { withCredentials: true }
       )
@@ -129,7 +130,7 @@ const Home = () => {
     setSaveAnimating((prev) => ({ ...prev, [videoId]: true }))
     try {
       await axios.post(
-        'http://localhost:3000/api/food/save',
+        `${API_BASE_URL}/api/food/save`,
         { foodId: videoId },
         { withCredentials: true }
       )

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import API_BASE_URL from '../config/api.js'
 
 const MAX_SIZE_BYTES = 100 * 1024 * 1024 // 100MB
 const ACCEPTED_MIME = ['video/mp4', 'video/quicktime'] // mp4, mov
@@ -25,7 +26,7 @@ const Dashboard = () => {
     // Get current user info
     const getCurrentUser = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/auth/me', { withCredentials: true })
+        const res = await axios.get(`${API_BASE_URL}/api/auth/me`, { withCredentials: true })
         if (res.data.role === 'food_partner') {
           setCurrentUser(res.data.user)
         } else {
@@ -107,7 +108,7 @@ const Dashboard = () => {
       formData.append('videoFile', selectedFile)
       formData.append('description', description)
 
-      const response = await axios.post('http://localhost:3000/api/food/upload-video', formData, {
+      const response = await axios.post(`${API_BASE_URL}/api/food/upload-video`, formData, {
         withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data'
