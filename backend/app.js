@@ -18,9 +18,6 @@ app.use("/api/food" , foodroutes)
 app.use('/api/food-partner' , foodpapartner)
 
 
-app.get("/", (req, res) => {
-    res.send("Hello World");
-});
 
 
 export default app;
