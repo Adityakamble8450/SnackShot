@@ -22,7 +22,13 @@ export const register = async (req, res) => {
             id: user._id
         }, process.env.JWT_SECRET, { expiresIn: "1h" })
 
-        res.cookie("token", token, { httpOnly: true, secure: true, maxAge: 1000 * 60 * 60 * 24 })
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", 
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // 🔥 important
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+          });
+          
         res.status(201).json({
             message: "User created successfully",
             user: {
@@ -74,9 +80,11 @@ export const login = async (req, res) => {
         // Send token in cookie
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // only secure in production
-            maxAge: 1000 * 60 * 60 * 24,
-        });
+            secure: process.env.NODE_ENV === "production", 
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // 🔥 important
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+          });
+          
 
         res.status(200).json({
             message: "User logged in successfully",
@@ -171,9 +179,11 @@ export const loginFoodPartner = async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production", // only secure in production
-            maxAge: 1000 * 60 * 60 * 24,
-        });
+            secure: process.env.NODE_ENV === "production", 
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // 🔥 important
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+          });
+          
 
         res.status(200).json({
             massage: "partern login succesfully",
