@@ -11,7 +11,10 @@ const app = express();
 dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors())
+app.use(cors({
+    origin: "https://snackshot-2-dqh3.onrender.com",
+    credentials: true, // allow cookies to be sent
+  }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/food" , foodroutes)
