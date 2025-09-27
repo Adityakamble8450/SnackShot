@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
-import API_BASE_URL from "../config/api.js";
+// import API_BASE_URL from "../config/api.js";
 
 const UserRegister = () => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const UserRegister = () => {
 
     // Example: send to backend (uncomment to use)
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/auth/user/register`, { name, email, phone, password } , {withCredentials : true});
+      const response = await axios.post(`https://snackshot-2-91cx.onrender.com/api/auth/user/register`, { name, email, phone, password } , {withCredentials : true});
 
       navigate("/")
 

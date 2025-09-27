@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import API_BASE_URL from "../config/api.js";
+// import API_BASE_URL from "../config/api.js";
 
 const UserLogin = () => {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const UserLogin = () => {
       const { email, password } = formData;
 
       const response = await axios.post(
-        `${API_BASE_URL}/api/auth/user/login`,
+        `https://snackshot-2-91cx.onrender.com/api/auth/user/login`,
         { email, password },
         { withCredentials: true }
       );

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import BottomNav from '../components/BottomNav'
-import API_BASE_URL from '../config/api.js'
+// import API_BASE_URL from '../config/api.js'
 
 const Profile = () => {
   const { id } = useParams()
@@ -19,7 +19,7 @@ const Profile = () => {
   const handleLogout = async () => {
     try {
       const logoutEndpoint = userRole === 'food_partner' ? '/api/auth/foodpartner/logout' : '/api/auth/user/logout'
-      await axios.get(`${API_BASE_URL}${logoutEndpoint}`, { withCredentials: true })
+      await axios.get(`https://snackshot-2-91cx.onrender.com${logoutEndpoint}`, { withCredentials: true })
       navigate('/')
     } catch (error) {
       navigate('/')
@@ -29,7 +29,7 @@ const Profile = () => {
   useEffect(() => {
     const checkCurrentUser = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/auth/me`, { withCredentials: true })
+        const res = await axios.get(`https://snackshot-2-91cx.onrender.com/api/auth/me`, { withCredentials: true })
         setCurrentUser(res.data.user)
         setUserRole(res.data.role)
         setIsOwner(res.data.role === 'food_partner' && res.data.user._id === id)
@@ -44,7 +44,7 @@ const Profile = () => {
     const fetchFoodPartnerProfile = async () => {
       try {
         setLoading(true)
-        const response = await axios.get(`${API_BASE_URL}/api/food-partner/profile/${id}`)
+        const response = await axios.get(`https://snackshot-2-91cx.onrender.com/api/food-partner/profile/${id}`)
         const apiProfile = response.data.data || {}
         const normalizedProfile = {
           ...apiProfile,

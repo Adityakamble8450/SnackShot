@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import API_BASE_URL from "../config/api.js";
+// import API_BASE_URL from "../config/api.js";
 
 const FoodPartnerRegister = () => {
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ const FoodPartnerRegister = () => {
     try {
       // API expects: name, email, password, phone, address, cuisineType
       const response = await axios.post(
-        `${API_BASE_URL}/api/auth/foodpartner/register`,
+        `https://snackshot-2-91cx.onrender.com/api/auth/foodpartner/register`,
         {
           name: restaurantName,
           email,

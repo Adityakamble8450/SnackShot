@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import BottomNav from '../components/BottomNav'
-import API_BASE_URL from '../config/api.js'
+// import API_BASE_URL from '../config/api.js'
 
 const Saved = () => {
   const [reels, setReels] = useState([])
@@ -12,7 +12,7 @@ const Saved = () => {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/food/saved`, { withCredentials: true })
+        const res = await axios.get(`https://snackshot-2-91cx.onrender.com/api/food/saved`, { withCredentials: true })
         const items = (res.data?.data || []).map((f) => ({
           id: f._id,
           videoUrl: f.video,
