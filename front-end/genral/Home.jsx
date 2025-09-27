@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import BottomNav from '../src/components/BottomNav'
-// import API_BASE_URL from '../src/config/api.js'
+
+const API_BASE_URL = 'https://snacksh-2.onrender.com'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -56,7 +57,7 @@ const Home = () => {
       if (!role) return
       setLoadingFeed(true)
       try {
-        const response = await axios.get(`https://snackshot-2-91cx.onrender.com/api/food`, { withCredentials: true })
+        const response = await axios.get(`${API_BASE_URL}/api/food`, { withCredentials: true })
         const transformed = (response.data?.data || []).map((foodItem) => ({
           id: foodItem._id,
           videoUrl: foodItem.video,
@@ -72,14 +73,14 @@ const Home = () => {
           const ids = transformed.map(v => v.id)
           // Like status
           const likeRes = await axios.post(
-            `https://snackshot-2-91cx.onrender.com/api/food/like-status`,
+            `${API_BASE_URL}/api/food/like-status`,
             { foodIds: ids },
             { withCredentials: true }
           )
           setLikeStatus(likeRes.data.status || {})
           // Save status
           const saveRes = await axios.post(
-            `https://snackshot-2-91cx.onrender.com/api/food/save-status`,
+            `${API_BASE_URL}/api/food/save-status`,
             { foodIds: ids },
             { withCredentials: true }
           )
@@ -99,7 +100,7 @@ const Home = () => {
     setLikeAnimating((prev) => ({ ...prev, [videoId]: true }))
     try {
       const res = await axios.post(
-        `https://snackshot-2-91cx.onrender.com/api/food/like`,
+        `${API_BASE_URL}/api/food/like`,
         { foodId: videoId },
         { withCredentials: true }
       )
@@ -130,7 +131,7 @@ const Home = () => {
     setSaveAnimating((prev) => ({ ...prev, [videoId]: true }))
     try {
       await axios.post(
-        `https://snackshot-2-91cx.onrender.comapi/food/save`,
+        `${API_BASE_URL}/api/food/save`,
         { foodId: videoId },
         { withCredentials: true }
       )

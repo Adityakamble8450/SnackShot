@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-// import API_BASE_URL from "../config/api.js";
+
+const API_BASE_URL = "https://snacksh-2.onrender.com";
 
 const UserLogin = () => {
   const navigate = useNavigate();
@@ -9,7 +10,12 @@ const UserLogin = () => {
     email: "",
     password: "",
   });
-  const [flash, setFlash] = useState(null); // { type: 'error' | 'success', message: string }
+  const [flash, setFlash] = useState(null);
+
+  // Set document title like in home.jsx
+  useEffect(() => {
+    document.title = "Login | SnackShot";
+  }, []);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -28,7 +34,7 @@ const UserLogin = () => {
       const { email, password } = formData;
 
       const response = await axios.post(
-        `https://snackshot-2-91cx.onrender.com/api/auth/user/login`,
+        `${API_BASE_URL}/api/auth/user/login`,
         { email, password },
         { withCredentials: true }
       );

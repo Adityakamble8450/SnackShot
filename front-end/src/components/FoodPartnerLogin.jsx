@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-// import API_BASE_URL from "../config/api.js";
+
+const API_BASE_URL = 'https://snacksh-2.onrender.com';
 
 const FoodPartnerLogin = () => {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ const FoodPartnerLogin = () => {
     password: "",
   });
   const [flash, setFlash] = useState(null); // { type: 'error' | 'success', message: string }
+  const [loading, setLoading] = useState(false);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -23,12 +25,12 @@ const FoodPartnerLogin = () => {
   // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     try {
       const { email, password } = formData;
 
-      const response = await axios.post(
-        `https://snackshot-2-91cx.onrender.com/api/auth/foodpartner/login`,
+      await axios.post(
+        `${API_BASE_URL}/api/auth/foodpartner/login`,
         { email, password },
         { withCredentials: true }
       );
@@ -38,6 +40,8 @@ const FoodPartnerLogin = () => {
       const message = error?.response?.data?.message || "Unable to login. Check email or password.";
       setFlash({ type: 'error', message });
       setTimeout(() => setFlash(null), 3500);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -79,6 +83,7 @@ const FoodPartnerLogin = () => {
                 onChange={handleChange}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                 placeholder="Enter your email"
+                disabled={loading}
               />
             </div>
             <div>
@@ -94,6 +99,7 @@ const FoodPartnerLogin = () => {
                 onChange={handleChange}
                 className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white bg-white dark:bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                 placeholder="Enter your password"
+                disabled={loading}
               />
             </div>
           </div>
@@ -106,6 +112,7 @@ const FoodPartnerLogin = () => {
                 type="checkbox"
                 className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600 rounded"
                 // Not implemented, just UI
+                disabled={loading}
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 dark:text-gray-300">
                 Remember me
@@ -123,8 +130,19 @@ const FoodPartnerLogin = () => {
             <button
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:focus:ring-offset-gray-900 transition-colors duration-200"
+              disabled={loading}
             >
-              Sign In
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                  </svg>
+                  Signing In...
+                </span>
+              ) : (
+                "Sign In"
+              )}
             </button>
           </div>
 

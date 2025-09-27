@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
-// import API_BASE_URL from "../config/api.js";
+
+const API_BASE_URL = "https://snacksh-2.onrender.com";
 
 const UserRegister = () => {
   const navigate = useNavigate();
@@ -10,8 +11,13 @@ const UserRegister = () => {
     email: '',
     phone: '',
     password: '',
-    // terms: false, // Removed terms field
   });
+  const [flash, setFlash] = useState(null);
+
+  // Set document title like in home.jsx
+  useEffect(() => {
+    document.title = "Register | SnackShot";
+  }, []);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -25,21 +31,36 @@ const UserRegister = () => {
   // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Access all field values from formData
     const { name, email, phone, password } = formData;
 
-    // Example: send to backend (uncomment to use)
     try {
-      const response = await axios.post(`https://snackshot-2-91cx.onrender.com/api/auth/user/register`, { name, email, phone, password } , {withCredentials : true});
-
-      navigate("/")
-
+      await axios.post(
+        `${API_BASE_URL}/api/auth/user/register`,
+        { name, email, phone, password },
+        { withCredentials: true }
+      );
+      navigate("/");
     } catch (error) {
+      const message = error?.response?.data?.message || "Unable to register. Please check your details.";
+      setFlash({ type: 'error', message });
+      setTimeout(() => setFlash(null), 3500);
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      {/* Flash Message */}
+      {flash && (
+        <div className="fixed top-6 right-6 z-50">
+          <div
+            role="alert"
+            aria-live="assertive"
+            className={`px-4 py-3 rounded-xl shadow-lg border text-sm font-medium ${flash.type === 'error' ? 'bg-red-600/90 border-red-500 text-white' : 'bg-green-600/90 border-green-500 text-white'} animate-[fade-in_150ms_ease-out]`}
+          >
+            {flash.message}
+          </div>
+        </div>
+      )}
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
@@ -112,8 +133,6 @@ const UserRegister = () => {
               />
             </div>
           </div>
-
-          {/* Checkbox for terms removed */}
 
           <div>
             <button
